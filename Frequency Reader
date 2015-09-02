@@ -57,4 +57,7 @@ int _GetAverageFreq(){
    
    return int(sumFreqs/AVARRSIZE);  
 }
+//********************************Delete upon reading***********************************************************//
+// This is from Jesse Graham..Testing comments and playing around. Feel Free to delete out whomever reads this  //
+//********************************Delete upon reading***********************************************************//
 
