@@ -1,13 +1,15 @@
 unsigned const int AVARRSIZE = 15, LED = 13;
 
-unsigned int cycles[AVARRSIZE];
-unsigned int cyclesCount = 0, average = 0;
+long cycles[AVARRSIZE];
+int cyclesCount = 0;
+long average = 0;
 
 unsigned long pulseTimerInit, pulseTimerDiff, updateTimerInit, updateTimerDiff;
 
 
 
 void setup(){
+  pinMode(LED, OUTPUT);
    updateTimerInit = millis();
 
   attachInterrupt(0, _HighPulse, RISING); // 0 = pin 2
@@ -19,8 +21,8 @@ void setup(){
 void loop(){
    updateTimerDiff = millis() - updateTimerInit;
 
-   if (updateTimerDiff > 300){
-      average = _GetAverageFreq();
+   if (updateTimerDiff > 1000){
+      _GetAverageFreq();
       if (average > 6000){
         digitalWrite(LED, HIGH); 
       }
@@ -28,6 +30,7 @@ void loop(){
         digitalWrite(LED, LOW);        
       }
       Serial.println(average);
+      updateTimerInit = millis();
    }
 }
 
@@ -48,16 +51,21 @@ void _HighPulse(){
 }
 
 int _GetAverageFreq(){
-   double tempFreq = 0, sumFreqs = 0;
+   double tempFreq = 0, aveTime, aveFreq;
+   long sumTimes = 0;
    int i = 0;
    
    for (i = 0; i < AVARRSIZE; i++){
-      sumFreqs = sumFreqs + 1/cycles[i];
+      sumTimes = (long)sumTimes + (long)cycles[i];
    }
-   
-   return int(sumFreqs/AVARRSIZE);  
+
+   aveTime = double((long)sumTimes / (long)AVARRSIZE);
+
+   average = long(float(1000000.0) / float(aveTime));    
 }
 //********************************Delete upon reading***********************************************************//
 // This is from Jesse Graham..Testing comments and playing around. Feel Free to delete out whomever reads this  //
+// Hi jesse.  I was very confused when I saw this.  I'm glad you got it working.  //
 //********************************Delete upon reading***********************************************************//
+
 
