@@ -4,12 +4,6 @@
 #define PIN_SDIN  4 // DN(MOSI) - Serial data, pin 6 on LCD.
 #define PIN_SCLK  3 // SCLK - Serial clock, pin 7 on LCD.
 
-
-
-
-
-
-
 #define LCD_C     LOW
 #define LCD_D     HIGH
 
