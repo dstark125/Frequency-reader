@@ -12,10 +12,10 @@
 #define LCD_X     84
 #define LCD_Y     48
 
-unsigned const int AVARRSIZE = 15, LED = 13;
+unsigned const int AVARRSIZE = 10, LED = 13;
 
 long cycles[AVARRSIZE];
-int cyclesCount = 0;
+int cyclesCount = 0, counter = 1;
 long average = 0;
 
 unsigned long pulseTimerInit, pulseTimerDiff, updateTimerInit, updateTimerDiff;
@@ -126,7 +126,7 @@ static const byte ASCII[][5] =
 
 void setup(){
   pinMode(LED, OUTPUT);
-   updateTimerInit = millis();
+  updateTimerInit = millis();
 
   attachInterrupt(0, _HighPulse, RISING); // 0 = pin 2
 
@@ -137,7 +137,7 @@ void setup(){
   LcdClear();
   delay(100);
   LcdPrint(lcdCharArr);
-  
+  delay(1500);
 }
 
 void loop(){
@@ -153,7 +153,7 @@ void loop(){
       }
       Serial.println(average);
       updateTimerInit = millis();
-      sprintf(lcdCharArr,"%iHz",average);
+      sprintf(lcdCharArr,"Frequency   %iHz",average);
       LcdPrint(lcdCharArr);
         //sprintf(disp_velocity_string, "%d.%2d ft/sec",velocity_int,velocity_decimal);
   //LcdString(disp_velocity_string);
@@ -161,18 +161,25 @@ void loop(){
 }
 
 void _HighPulse(){
-   unsigned long currentTimer = micros();
-
-   pulseTimerDiff = currentTimer - pulseTimerInit;
-
-   pulseTimerInit = currentTimer;
+   unsigned long currentTimer;
+   
+   if (counter >= 6){
+     currentTimer = micros();
+     counter = 1;
+     pulseTimerDiff = currentTimer - pulseTimerInit;
   
-   cycles[cyclesCount] = pulseTimerDiff;
-   
-   cyclesCount++;
-   
-   if (cyclesCount > (AVARRSIZE-1)){
-      cyclesCount = 0;
+     pulseTimerInit = currentTimer;
+    
+     cycles[cyclesCount] = pulseTimerDiff;
+     
+     cyclesCount++;
+     
+     if (cyclesCount > (AVARRSIZE-1)){
+        cyclesCount = 0;
+     }
+   }
+   else{
+    counter++;
    }
 }
 
@@ -186,7 +193,7 @@ int _GetAverageFreq(){
    }
 
    aveTime = double((long)sumTimes / (long)AVARRSIZE);
-
+   aveTime = double(double(aveTime)/double(6.0));
    average = long(float(1000000.0) / float(aveTime));    
 }
 
