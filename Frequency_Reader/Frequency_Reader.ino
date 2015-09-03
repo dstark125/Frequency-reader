@@ -21,7 +21,7 @@ long average = 0;
 unsigned long pulseTimerInit, pulseTimerDiff, updateTimerInit, updateTimerDiff;
 
 
-char lcdCharArr[73] = "Welcome to the ball bearing accelerator!";
+char lcdCharArr[73] = "Welcome to the frequency detector!";
 
 static const byte ASCII[][5] =
 {
