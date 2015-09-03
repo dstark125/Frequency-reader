@@ -1,11 +1,10 @@
+#include <LiquidCrystal.h>
+
 #define PIN_SCE   7 // SCE - Chip select, pin 3 on LCD.
 #define PIN_RESET 6 // RST - Reset, pin 4 on LCD.
 #define PIN_DC    5 // DC - Data/Command, pin 5 on LCD.
 #define PIN_SDIN  4 // DN(MOSI) - Serial data, pin 6 on LCD.
 #define PIN_SCLK  3 // SCLK - Serial clock, pin 7 on LCD.
-
-//Here is some space for prettiness
-
 
 #define LCD_C     LOW
 #define LCD_D     HIGH
@@ -136,13 +135,8 @@ void setup(){
 
   LcdInitialise();
   LcdClear();
+  delay(100);
   LcdPrint(lcdCharArr);
-  delay(3000);
-  LcdPrint("These are some");
-  delay(3000);
-  LcdPrint("random strings that will");
-  delay(3000);
-  LcdPrint("vary in length but should not overflow.");
   
 }
 
@@ -159,6 +153,10 @@ void loop(){
       }
       Serial.println(average);
       updateTimerInit = millis();
+      sprintf(lcdCharArr,"%iHz",average);
+      LcdPrint(lcdCharArr);
+        //sprintf(disp_velocity_string, "%d.%2d ft/sec",velocity_int,velocity_decimal);
+  //LcdString(disp_velocity_string);
    }
 }
 
@@ -238,10 +236,6 @@ char * LcdFixSpaces(char *characters){
   }
 }
 
-
-char * StringShift(int spaces){
-  
-}
 
 
 void LcdCharacter(char character)
